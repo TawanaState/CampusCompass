@@ -10,7 +10,7 @@ const firebaseConfig = {
   measurementId: "G-E7BG9XL8DV"
 };
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const app = firebase.initializeApp(firebaseConfig);
 
 var user = {};
 var friends = [];
