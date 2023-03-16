@@ -278,5 +278,5 @@ if (navigator.geolocation) {
 
 
 function geolocationFailure() {
-  notify('Please turn on your location for location tracking.', ['text-danger']);
+  //notify('Please turn on your location for location tracking.', ['text-danger']);
 }
