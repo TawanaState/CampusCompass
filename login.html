@@ -29,7 +29,7 @@
     <div class="main">
         <form action="" onsubmit="formSubmit(event)">
             <h3>Login</h3>
-            <input type="text" class="form-control" required name="" id="id_username" placeholder="Username">
+            <input type="email" class="form-control" required name="" id="id_email" placeholder="Emaill Address">
             <input type="password" class="form-control" required name="" id="id_password" placeholder="Password">
             <p class="text-danger"></p>
             <button class="btn btn-info">Login</button>
@@ -99,7 +99,7 @@
     function formSubmit(event){
         event.preventDefault();
         
-        select('form p.text-danger').innerText = Login(getVal('#user_email'), getVal('#id_password'), getVal('#id_username'));
+        select('form p.text-danger').innerText = Login(getVal('#id_email'), getVal('#id_password'));
             
     }
     function getVal(query){
