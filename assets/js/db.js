@@ -106,7 +106,7 @@ firebase.auth().onAuthStateChanged((userr) => {
     // ...
   } else {
     if(!window.location.href.includes('signup') && !window.location.href.includes('login')){
-      window.location.href = "login.html";
+      window.location.href = "about.html";
     }
   }
 
@@ -118,25 +118,31 @@ firebase.auth().onAuthStateChanged((userr) => {
 });
 
 eventsListRef.on('value', (snapshot) => {
-  events = [];
-  snapshot.forEach((childSnapshot) => {
-    events.push({
-      key : childSnapshot.key,
-      data : childSnapshot.val()
+  
+  if (snapshot.exists()) {
+    events = [];
+    snapshot.forEach((childSnapshot) => {
+      events.push({
+        key : childSnapshot.key,
+        data : childSnapshot.val()
+      });
     });
-  });
-  refreshUI();
+    refreshUI();
+  }
+  
 });
 
 friendsListRef.on('value', (snapshot) => {
   friends = [];
-  snapshot.forEach((childSnapshot) => {
-    friends.push({
-      key : childSnapshot.key,
-      data : childSnapshot.val()
+  if (snapshot.exists()) {
+    snapshot.forEach((childSnapshot) => {
+      friends.push({
+        key : childSnapshot.key,
+        data : childSnapshot.val()
+      });
     });
-  });
-  refreshUI();
+    refreshUI();
+  }
 });
 
 

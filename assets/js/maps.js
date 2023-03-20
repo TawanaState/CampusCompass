@@ -3,12 +3,25 @@ var map, watchId, userPin, directionsManager, routePath, destinationLoc, friendP
 function init() {
     map = new Microsoft.Maps.Map("#map", {
       center: new Microsoft.Maps.Location(-17.78521, 31.05311),
-      zoom: 19
+      zoom: 19,
+      supportedMapTypes: [
+        Microsoft.Maps.MapTypeId.road,
+        Microsoft.Maps.MapTypeId.aerial,
+        Microsoft.Maps.MapTypeId.streetside,
+        Microsoft.Maps.MapTypeId.grayscale,
+        Microsoft.Maps.MapTypeId.canvasDark,
+        Microsoft.Maps.MapTypeId.canvasLight,
+        Microsoft.Maps.MapTypeId.birdseye, //Will display a button in the future.
+    ],
+      mapTypeId: Microsoft.Maps.MapTypeId.grayscale
     });
 
-    friendPin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(-17.78521, 31.05311), {visible : false});
-    EventPin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(-17.78521, 31.05311), {visible : false});
-    PlacePin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(-17.78521, 31.05311), {visible : false});
+    friendPin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(-17.78521, 31.05311), {visible : false, icon: 'assets/img/user_location_48px.png',
+    anchor: new Microsoft.Maps.Point(24, 24)});
+    EventPin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(-17.78521, 31.05311), {visible : false, icon: 'assets/img/point_of_interest_52px.png',
+    anchor: new Microsoft.Maps.Point(26, 26)});
+    PlacePin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(-17.78521, 31.05311), {visible : false, icon: 'assets/img/marker_100px.png',
+      anchor: new Microsoft.Maps.Point(50, 50)});
     map.entities.push(friendPin);
     map.entities.push(EventPin);
     map.entities.push(PlacePin);
@@ -21,6 +34,9 @@ function init() {
     directionsManager = new Microsoft.Maps.Directions.DirectionsManager(map);
 
     //Define direciton options that you want to use, that won't be reset the next time a route is calculated.
+    //Calculate a date time that is 1 hour from now.
+    var departureTime  = new Date();
+    departureTime.setMinutes(departureTime.getHours() + 1);
 
     //Set the request options that avoid highways and uses kilometers.
     directionsManager.setRequestOptions({
@@ -28,6 +44,9 @@ function init() {
       routeAvoidance: [
         Microsoft.Maps.Directions.RouteAvoidance.avoidLimitedAccessHighway,
       ],
+      routeMode: Microsoft.Maps.Directions.RouteMode.walking,
+      time: departureTime,
+      timeType: Microsoft.Maps.Directions.TimeTypes.departure
     });
 
     //Make the route line thick and green.
@@ -244,6 +263,7 @@ window.places = [
 
 window.init = init;
 
+
 function startTracking() {
   //Add a pushpin to show the user's location.
   userPin = new Microsoft.Maps.Pushpin(map.getCenter(), { visible: false });
@@ -254,6 +274,7 @@ function startTracking() {
 }
 
 function locateFriend(param) {
+  stopTracking();
   let loc = new Microsoft.Maps.Location(
     param.location.latitude,
     param.location.longitude
@@ -269,11 +290,12 @@ function locateFriend(param) {
 
   //Center the map on the user's location.
   map.setView({ center: loc });
-  showinFooter('@'+param.username,'<b>Lastseen : </b> ' + new Date(param.lastseen).toString(), [], param.location)
+  showinFooter('@'+param.username,'<b>Lastseen : </b> ' + new Date(param.lastseen).toString(), [], param.location);
 
 }
 
 function locateEvent(param) {
+  stopTracking();
   let loc = new Microsoft.Maps.Location(
     param.location.latitude,
     param.location.longitude
@@ -296,6 +318,7 @@ function locateEvent(param) {
 }
 
 function locatePlace(param) {
+  stopTracking();
   let loc = new Microsoft.Maps.Location(
     param.position.lat,
     param.position.lng
@@ -304,17 +327,11 @@ function locatePlace(param) {
   //Create custom Pushpin
   PlacePin.setOptions({
       title: param.title,
-      subTitle: 'event',
-      text: 'e',
+      subTitle: 'place',
       visible : true
-  });
-
-
-
-  //Center the map on the user's location.
+  }); //Center the map on the user's location.
   map.setView({ center: loc });
-  showinFooter(param.title, param.content, param.images, {latitude : param.position.lat, longitude : param.postion.lng});
-
+  showinFooter(param.title, param.content, param.images, {latitude : param.position.lat, longitude : param.position.lng});
 }
 
 function usersLocationUpdated(position) {
@@ -394,5 +411,14 @@ function goNow(event) {
       startTracking();
 }
 function shareNow(event) {
-    
+  input = document.getElementById('textarea_copy');
+  let websi = window.location.href;
+  websi = websi.replace('attractions.html', '');
+  websi = websi.replace(window.location.hash, '');
+  input.value = `${websi}index.html#lat=${Number(document.querySelector('#LocPin').getAttribute('lat'))}&lng=${Number(document.querySelector('#LocPin').getAttribute('lng'))}`;
+  input.classList.toggle('d-none');
+  input.select();
+  document.execCommand("copy");
+  input.classList.toggle('d-none');
+  notify('Link has been copied. </br> Now you can share with your friends :)');
 }

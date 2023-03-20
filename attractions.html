@@ -108,11 +108,67 @@
     <textarea class="d-none" name="" id="textarea_copy" cols="30" rows="10"></textarea>
     <script>
         var map;
+        var midnightCommander = {
+            "version": "1.0",
+            "settings": {
+                "landColor": "#0B334D"
+            },
+            "elements": {
+                "mapElement": {
+                    "labelColor": "#FFFFFF",
+                    "labelOutlineColor": "#000000"
+                },
+                "political": {
+                    "borderStrokeColor": "#144B53",
+                    "borderOutlineColor": "#00000000"
+                },
+                "point": {
+                    "iconColor": "#0C4152",
+                    "fillColor": "#000000",
+                    "strokeColor": "#0C4152"
+                },
+                "transportation": {
+                    "strokeColor": "#000000",
+                    "fillColor": "#000000"
+                },
+                "highway": {
+                    "strokeColor": "#158399",
+                    "fillColor": "#000000"
+                },
+                "controlledAccessHighway": {
+                    "strokeColor": "#158399",
+                    "fillColor": "#000000"
+                },
+                "arterialRoad": {
+                    "strokeColor": "#157399",
+                    "fillColor": "#000000"
+                },
+                "majorRoad": {
+                    "strokeColor": "#157399",
+                    "fillColor": "#000000"
+                },
+                "railway": {
+                    "strokeColor": "#146474",
+                    "fillColor": "#000000"
+                },
+                "structure": {
+                    "fillColor": "#115166"
+                },
+                "water": {
+                    "fillColor": "#021019"
+                },
+                "area": {
+                    "fillColor": "#115166"
+                }
+            }
+        };
+    
 
         function GetMap() {
             map = new Microsoft.Maps.Map('#myMap', {
                 center: new Microsoft.Maps.Location(-17.78521, 31.05311),
-                zoom: 19
+                zoom: 19, 
+                //customMapStyle: midnightCommander,
             });
 
             let center = map.getCenter();

@@ -18,7 +18,7 @@
   <!-- Add to homescreen for Safari on iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="FriendlyEats">
+  <meta name="apple-mobile-web-app-title" content="CampusCompass">
     <link rel="stylesheet" href="assets/css/style.css">
     <title>Campus Compass</title>
 </head>
@@ -36,8 +36,7 @@
         <img class="rounded-circle my-2" src="assets/img/user icon.png" alt="">
         <p class="my-2">
             <i id="broadcast-pin" class="bi bi-pen"></i>
-            <i id="broadcast-pin" class="bi bi-geo-alt-fill"></i>
-            <i id="broadcast-pin" class="bi bi-gear"></i>
+            <i id="broadcast-pin" onclick="notify('Please turn on your location, and allow permission for the website. ')" class="bi bi-geo-alt-fill"></i>
         </p>
         
         <h3 id="heading_username" class="mt-2 mb-2">...</h3><hr>
@@ -53,8 +52,9 @@
             <h5 id="LocPin" lng="31.05311" lat="-17.78521">University of Zimbabwe</h5>
             <p class="btns" align="right">
                 <button class="btn btn-info px-2 py-1" onclick="goNow(event)"> <i class="bi bi-geo-alt mx-1 ml-0"></i> Go <i class="mx-1"></i> </button>
-                <button class="btn btn-info px-2 py-2"> <i class="bi bi-share-fill mx-1 ml-0"></i> </button>
+                <button class="btn btn-info px-2 py-2" onclick="shareNow(event)"> <i class="bi bi-share-fill mx-1 ml-0"></i> </button>
             </p>
+            <textarea class="d-none" name="" id="textarea_copy" cols="30" rows="10"></textarea>
             <div class="images">
                 
             </div>
@@ -71,21 +71,59 @@
     </div>
 
     <script>
+        let images2 = [
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/Administration%20Block.png",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/Campus%20Overview%20Faculty%20of%20Agriculture%20&%20IMR.png",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/Campus%20Overview%20Faculty%20of%20Science%20Buildings.png",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/Campus%20Overview.png",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/Campus%20Overview_2.png",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/Campus%20Overview_3.png",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/Campus%20Overview_4.png",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/Campus%20Overview_5.png",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/Campus%20Overview_6.png",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/Department%20of%20Biological%20Sciences.png",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/Depratments%20of%20Physics,%20Chemistry%20&%20Computer%20Science.JPG",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/Diamond%20Lecture%20Theatre.png",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/Diamond%20Lecture%20Theatre_2.png",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/Diamond%20Lecture%20Theatre_3.png",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/Diamond%20Lecture%20Theatre_4.png",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/Faculty%20of%20Engineering.jpg",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/Halls%20of%20Residence%20Overview.png",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/New%20&%20Old%20Llewelyn%20Lecture%20Buildings.png",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/New%20Llewelyn%20Lecture%20Building.png",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/North%20Side%20of%20Campus%20.png",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/Sports%20Fields%20Overview.png",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/UZ%20Great%20Hall.png",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/UZ%20Great%20Hall_2.png",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/UZ%20Great%20Hall_3.png",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/UZ%20Main%20Library.png",
+            "https://www.uz.ac.zw/images/uzfrontgallery_2/UZ%20Main%20Library_2.png"
+        ]    
+        images2.forEach((v, k, p) => {
+            let img = document.createElement('img');
+            img.src = v;
+            document.querySelector('.images').appendChild(img);
+        });
+        
         function showinFooter(title, description, images, location){
+            document.querySelector('.images').innerHTML = '';
             document.querySelector('footer h5').innerText = title;
             document.querySelector('footer h5').setAttribute('lng', location.longitude);
             document.querySelector('footer h5').setAttribute('lat', location.latitude);
             document.querySelector('footer .content').innerHTML = description;
+            if (images.length == 0) {
+                images = images2;
+            }
             images.forEach((v, k, p) => {
                 let img = document.createElement('img');
                 img.src = v;
                 document.querySelector('.images').appendChild(img);
-            })
-        }
+            });
+          }
     </script>
 
     <script src="assets/js/maps.js"></script>
-    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=init&key=AvSb9MNVFI9fgxh3S9aCiXzvnmjxwaCY0GGBHnzmTqeHUJVojWodasPjeGIi9VOD' async defer></script>
+    <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=init&key=AvSb9MNVFI9fgxh3S9aCiXzvnmjxwaCY0GGBHnzmTqeHUJVojWodasPjeGIi9VOD' async defer></script>
     <script src="assets/js/main.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script>
@@ -112,7 +150,6 @@
         }
 
         on('change', 'input#id_search', (event) => {
-            try{
                 let valu = event.target.value;
                 if(valu.startsWith('@')){
                     locateFriend(friends.filter(val => val.data.username == val.replace('@', ''))[0].data);
@@ -121,9 +158,6 @@
                 }else{
                     locatePlace(places.filter(val => val.title == valu)[0]);
                 }
-            }catch(e){
-                notify(e, 'text-warning');
-            }
             
         });
         
