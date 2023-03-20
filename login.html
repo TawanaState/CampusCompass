@@ -99,7 +99,7 @@
     function formSubmit(event){
         event.preventDefault();
         
-        select('form p.text-danger').innerText = Login(getVal('#user_email'), getVal('#user_password'), getVal('#user_username'));
+        select('form p.text-danger').innerText = Login(getVal('#user_email'), getVal('#id_password'), getVal('#id_username'));
             
     }
     function getVal(query){
