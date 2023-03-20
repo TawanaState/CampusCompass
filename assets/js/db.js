@@ -250,7 +250,7 @@ function getEvent(key, myfunc = (() => {})) {
 }
 function updateEvent(uid, param) {
   try {
-  let evRef = database.ref("friends/" + uid);
+  let evRef = database.ref("events/" + uid);
   evRef.update(param);
   } catch (error) {
     notify(error)
@@ -258,7 +258,7 @@ function updateEvent(uid, param) {
 }
 function updateFriendLocation(position) {
   try {
-  let userRef = database.ref("friends/" + friends.filter(val => val.data.user_id == user.uid)[0].key);
+  let userRef = database.ref("friends/" + friends.filter(val => val.data.user_id == user.uid)[0]);
   userRef.update({
     lastseen: new Date().toString(),
     location: {
