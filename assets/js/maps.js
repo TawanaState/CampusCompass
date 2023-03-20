@@ -13,7 +13,7 @@ function init() {
         Microsoft.Maps.MapTypeId.canvasLight,
         Microsoft.Maps.MapTypeId.birdseye, //Will display a button in the future.
     ],
-      mapTypeId: Microsoft.Maps.MapTypeId.grayscale
+      mapTypeId: Microsoft.Maps.MapTypeId.canvasLight
     });
 
     friendPin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(-17.78521, 31.05311), {visible : false, icon: 'assets/img/user_location_48px.png',
