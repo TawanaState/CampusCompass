@@ -19,7 +19,7 @@
   <!-- Add to homescreen for Safari on iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="FriendlyEats">
+  <meta name="apple-mobile-web-app-title" content="Campus Compass">
   <meta name="apple-mobile-web-app-status-bar-style" content="#fff">
 
     <link rel="stylesheet" href="assets/css/style.css">
@@ -80,7 +80,7 @@
         color: white;
     }
     .ad{
-        background-image: url(/assets/img/campus_compass_bg.png);
+        background-image: url(assets/img/campus_compass_bg.png);
         background-position-x: right;
     }
     @media (max-width: 768px) {
@@ -89,7 +89,7 @@
         }
         div.main{
             width: 100%;
-            background-image: url(/assets/img/campus_compass_bg.png);
+            background-image: url(assets/img/campus_compass_bg.png);
             background-position-x: center;
         }
     }
@@ -105,7 +105,12 @@
     function formSubmit(event){
         event.preventDefault();
         if(getVal('#user_password') == getVal('#user_confirm_password')){
-            select('form p.text-danger').innerText = SignUp(getVal('#user_email'), getVal('#user_password'), getVal('#user_username'))
+            let returnval = SignUp(getVal('#user_email'), getVal('#user_password'), getVal('#user_username'));
+            
+            if (returnval !== undefined){
+            select('form p.text-danger').innerText = returnval;
+            }
+            
         } else {
             notify('Please enter the same password. ', ['text-danger'], select('body > .main'));
         }
