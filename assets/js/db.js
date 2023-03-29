@@ -13,6 +13,7 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 
 var user = {};
+var user_share_url = '';
 var friends = [];
 var events = [];
 
@@ -27,6 +28,8 @@ function refreshUI() {
     document.querySelectorAll("datalist#Places > option[type='Event']").forEach((v, k, p) => {
       v.remove();
     });
+    document.querySelector('ul.list.friends').innerHTML = '';
+    select("ul.list.events").innerHTML = '';
   friends.forEach((v, k, p) => {
     let li = document.createElement('li');
     li.innerHTML = `<p>${v.data.username}</p> <span>${new Date(v.data.lastseen).toString()}</span>`;
@@ -53,7 +56,7 @@ function refreshUI() {
     let endTime = new Date(v.data.endTime);
     let now = new Date();
   
-    if (now > startTime && endTime > now) {
+    if (endTime > now) {
       let li = document.createElement("li");
       li.innerHTML = `<p>${v.data.event_name}</p> <span>${new Date(
         v.data.startTime
@@ -86,6 +89,7 @@ function refreshUI() {
   });
 
   } catch (error) {
+    console.log(error);
   }
   
 }
@@ -266,9 +270,22 @@ function updateFriendLocation(position) {
       lng: position.coords.longitude,
     },
   });
+
+  user_share_url = window.location.origin + `\index.html#lat=${position.coords.latitude}&lng=${position.coords.longitude}`;
+  
   } catch (error) {
-    notify(error)
+    notify(error + " -- GeoLocation Error");
   }
+}
+
+function shareMine(event) {
+  input = document.getElementById('textarea_copy');
+  input.value = user_share_url;
+  input.classList.toggle('d-none');
+  input.select();
+  document.execCommand("copy");
+  input.classList.toggle('d-none');
+  notify('Link has been copied. </br> Now you can share with your friends :)');
 }
 
 
@@ -279,7 +296,7 @@ if (navigator.geolocation) {
     geolocationFailure
   );
 } else {
-  notify("Geolocation is not supported by this browser.", ["text-danger"]);
+  notify("Geolocation is not supported by this browser.", ["text-warning"]);
 }
 
 

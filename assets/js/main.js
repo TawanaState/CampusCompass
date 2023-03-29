@@ -98,7 +98,7 @@ on(
 );
 
 
-function notify(msg, classes = ["text-white"], container = document.body) {
+function notify(msg, classes = ["text-white"], container = document.querySelector('html')) {
   let ts = document.createElement("div");
   ts.classList.add("toaster");
   let pr = document.createElement("p");
@@ -108,7 +108,7 @@ function notify(msg, classes = ["text-white"], container = document.body) {
   container.appendChild(ts);
   window.setTimeout(() => {
     container.removeChild(ts);
-  }, 12000);
+  }, 8 * 1000);
 }
 
 places.forEach((v, k, p) => {

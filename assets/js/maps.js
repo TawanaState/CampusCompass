@@ -69,7 +69,7 @@ window.places = [
   {
     title: "University Of Zimbabwe",
     position: { lat: -17.78521, lng: 31.05311 },
-    content: "",
+    content: "The University of Zimbabwe (UZ) is a public university in Harare, Zimbabwe. It opened in 1952 as the University College of Rhodesia and Nyasaland, and was initially affiliated with the University of London. It was later renamed the University of Rhodesia, and adopted its present name upon Zimbabwe's independence in 1980. UZ is the oldest and best-ranked university in Zimbabwe. The university has eleven faculties and one college (with faculties of Agriculture, Arts, Commerce, Education, Engineering, Law, Science, Social Studies, Veterinary Sciences and the College of Health Sciences) offering a wide variety of degree programmes and many specialist research centres and institutes. The university is accredited through the National Council for Higher Education, under the Ministry of Higher and Tertiary Education. English is the language of instruction. ",
     images: [],
   },
   {
@@ -415,7 +415,7 @@ function shareNow(event) {
   let websi = window.location.href;
   websi = websi.replace('attractions.html', '');
   websi = websi.replace(window.location.hash, '');
-  input.value = `${websi}index.html#lat=${Number(document.querySelector('#LocPin').getAttribute('lat'))}&lng=${Number(document.querySelector('#LocPin').getAttribute('lng'))}`;
+  input.value = `${websi}#lat=${Number(document.querySelector('#LocPin').getAttribute('lat'))}&lng=${Number(document.querySelector('#LocPin').getAttribute('lng'))}`;
   input.classList.toggle('d-none');
   input.select();
   document.execCommand("copy");

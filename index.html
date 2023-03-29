@@ -25,7 +25,7 @@
 <body>
     <header class="d-flex flex-row align-center align-items-center justify-content-center my-4 mx-3 mt-5">
             <i class="bi bi-list" onclick="document.querySelector('nav').classList.add('active');"></i>
-            <input list="Places" value="University Of Zimbabwe" class="form-control rounded-pill m-0 px-5 shadow-sm" type="search" placeholder="Search" id="id_search">
+            <input list="Places" value="University Of Zimbabwe" class="form-control rounded-pill m-0 px-5 shadow-sm" style="padding-block:10px!important;" type="search" placeholder="Search" id="id_search">
             <i class="bi bi-search"></i>
     </header>
     <datalist id="Places"> 
@@ -35,13 +35,14 @@
         <button id="btn-close" class="btn btn-close zero-shadow toggle-btn"></button>
         <img class="rounded-circle my-2" src="assets/img/user icon.png" alt="">
         <p class="my-2">
-            <i id="broadcast-pin" class="bi bi-pen"></i>
-            <i id="broadcast-pin" onclick="notify('Please turn on your location, and allow permission for the website. ')" class="bi bi-geo-alt-fill"></i>
+            <i id="broadcast-pin" class="bi bi-share" onclick="shareMine(event);"></i>
+            <i id="broadcast-pin" onclick="notify('Please turn on your location, and allow the website to acces your location. ')" class="bi bi-geo-alt-fill"></i>
         </p>
         
         <h3 id="heading_username" class="mt-2 mb-2">...</h3><hr>
         <a href="attractions.html">Attractions</a><hr>
         <a href="about.html">About App</a><hr>
+        <a href="chat.html">Chatbot</a><hr>
         <a href="login.html">Logout</a>
     </nav>
     <div id="map">
@@ -145,7 +146,18 @@
             } else if(window.location.hash.includes('event=')){
                 let hash = window.location.hash;
                 let key = hash.replace('#friend=', "");
-                getFriend(key, locateFriend)
+                getFriend(key, locateFriend);
+                let us = "http://127.0.0.1:5500/index.html#lat=-17.78521&lng=31.05311"
+            } else if(window.location.hash.includes('lat=') && window.location.hash.includes('lng=')){
+                let hash = window.location.hash;
+                hash = hash.replace('#', '').replace('lat=', '').replace('lng=', '');
+                let poarr = hash.split('&');
+                document.querySelector('#LocPin').setAttribute('lat', Number(poarr[0]));
+                document.querySelector('#LocPin').setAttribute('lng', Number(poarr[1]));
+                console.log('going to : ' + poarr[0] + '  ' +  poarr[1]);
+                goNow(hash); // I assigned hash to event coz the event parameter is not being used in any way. 
+                
+
             }
         }
 

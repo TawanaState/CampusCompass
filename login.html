@@ -88,7 +88,6 @@
             background-position-x: left;
         }
     }
-    .toaster{display : none;}
 </style>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script>
@@ -100,11 +99,9 @@
     function formSubmit(event){
         event.preventDefault();
         let returnval = Login(getVal('#id_email'), getVal('#id_password'));
-        if (returnval !== undefined)
+        if (returnval !== undefined){
             select('form p.text-danger').innerText = returnval;
         }
-        
-            
     }
     function getVal(query){
         return document.querySelector(query).value;
