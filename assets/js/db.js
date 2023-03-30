@@ -30,6 +30,7 @@ function refreshUI() {
     });
     document.querySelector('ul.list.friends').innerHTML = '';
     select("ul.list.events").innerHTML = '';
+    select("ul.list.my-events").innerHTML = '';
   friends.forEach((v, k, p) => {
     let li = document.createElement('li');
     li.innerHTML = `<p>${v.data.username}</p> <span>${new Date(v.data.lastseen).toString()}</span>`;
@@ -90,6 +91,7 @@ function refreshUI() {
 
   } catch (error) {
     console.log(error);
+    notify(error + '-- events & friends', 'text-danger');
   }
   
 }

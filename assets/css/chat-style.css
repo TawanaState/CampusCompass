@@ -28,7 +28,7 @@ body{
 }
 .chats{
     padding: 7px;
-    height: calc(100vh - 52px - 52px - 65px) ;
+    height: calc(100vh - 52px - 52px - 80px) ;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -111,4 +111,35 @@ body{
     padding: 8px 20px;
     background-color: #4242422e!important;
     
+}
+.dropdown{
+    height: 0px;
+    width: 0px;
+    transition-delay: 100ms;
+    transition-duration: .5s;
+    position: absolute;
+    top: 40px;
+    right: 40px;
+}
+.dropdown.active{
+    display: flex;
+    flex-direction: column;
+    padding: 7px;
+    border-radius: 10px;
+    width: fit-content;
+    height: fit-content;
+    background-color: #4242422e!important;
+}
+.dropdown > span{
+    width: 0px;
+    height: 0px;
+    cursor: hand;
+    padding: 5px;
+    margin: 5px 10px 5px 5px;
+    display: none;
+}
+.dropdown.active > span{
+    display: block;
+    width: fit-content;
+    height: fit-content;
 }

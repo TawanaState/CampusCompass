@@ -8,15 +8,12 @@ var db = new Dexie('MyChats');
 db.version(1).stores({
     chats : '++id, me, content, data'
 });
-select('.chats .msg', true).forEach((v, k, p) => {
-    v.remove();
-});
+select('.chats').innerHTML = '';
 db.chats.each(item => {
-    console.log(item);
     addMessage(item.content, item.data, item.me);
 });
 
-
+user = {displayName : 'State'};
 let model;
 recognition.grammars = speechRecognitionList;
 recognition.continuous = true;
@@ -158,6 +155,7 @@ function response(qsn){
     qsns = qsns.sort((a, b) => {
         return b.rating - a.rating; 
     });
+    console.log(qsns[0]);
     if(qsns[0].rating > 0.5){
         let dd = QNA.filter(v => v.q.includes(qsns[0].target));
         addMessage(qsn, (new Date).toLocaleString());
@@ -173,4 +171,9 @@ function randomPick(arr) {
     const randomIndex = Math.floor(Math.random() * arr.length);
     const item = arr[randomIndex];
     return item;
+}
+
+function clearMsgs(param) {
+    db.chats.clear();
+    select('.chats').innerHTML = '';
 }

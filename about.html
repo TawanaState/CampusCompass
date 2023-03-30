@@ -110,6 +110,13 @@
         
     </div>
 
+    <div id="contact" class="bg-white p-4 py-5">
+        <h2 align="center" class="my-2">Contact Us</h2>
+        <input class="form-control my-2" type="text" placeholder="Subject" id="msg-title">
+        <textarea class="form-control" placeholder="Message" name="" id="msg" cols="10" rows="5"></textarea>
+        <button class="btn btn-light mx-0 my-1 px-3 btn-send">Send</button>
+    </div>
+
     <div id="footer" class="bg-dark p-4 text-white-50">
         <h4 align="center" class="m-0">Learn | Build | Share</h4>
         <br>
@@ -132,7 +139,8 @@
         
         <h3 id="heading_username" class="mt-2 mb-2">Unknown</h3><hr>
         <a href="attractions.html">Attractions</a><hr>
-        <a href="index.html">App</a><hr>
+        <a href="about.html">About App</a><hr>
+        <a href="chat.html">Chatbot</a><hr>
         <a href="login.html">Logout</a>
     </nav>
 
@@ -142,9 +150,17 @@
     body{
         overflow-y: auto;
     }
+    body:has(nav.active){
+        overflow-y: hidden;
+    }
+    #contact{
+        background-image: url(assets/img/campus_compass_bg.png);
+        background-repeat: no-repeat;
+    }
     .header{
         background-image: url(assets/img/dark_bg.png);
         background-repeat: no-repeat;
+        background-position: right;
         animation: slide 10s ease-out 0.3s 1;
     }
     .header > img{
@@ -271,6 +287,10 @@
             width: 14rem;
             height: 14rem;
         }
+        #contact{
+            padding-left: 200px!important;
+            padding-right: 200px!important;
+        }
     }
     @media (min-width : 1000px) {
         .cards{
@@ -279,4 +299,15 @@
         
     }
 </style>
+<script>
+    on('click', '.btn-send', event => {
+        if(select('#msg').value !== null){
+            window.location.href = `mailto:tawmuks@gmailcom?subject=${select('#msg-title').value}&body=${select('#msg').value}`;
+            select('#msg-title').value = '';
+            select('#msg').value = '';
+        } else {
+            notify('Please fill in the blank', 'text-danger');
+        }
+    })
+</script>
 </html>
