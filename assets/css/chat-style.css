@@ -28,7 +28,7 @@ body{
 }
 .chats{
     padding: 7px;
-    height: calc(100vh - 52px - 52px - 120px) ;
+    height: calc(100vh - 52px - 52px - 200px) ;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
