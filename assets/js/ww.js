@@ -1,6 +1,6 @@
 try {
     importScripts('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.8.0/dist/tf.min.js');
-    importScripts('https://cdn.jsdelivr.net/npm/@tensorflow-models/qna@3.0.0/dist/qna.min.js');
+    importScripts('https://cdn.jsdelivr.net/npm/@tensorflow-models/qna');
 } catch (error) {
     self.postMessage({start : false});
     console.error(error);
