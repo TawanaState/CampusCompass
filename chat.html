@@ -30,6 +30,7 @@
         <span onclick="window.location.href = 'chatbot.html'">About Chat Bot</span>
         <span onclick="window.location.href = 'about.html#contact'">Comment</span>
     </div>
+
         <div class="header"> <!--58px height-->
             <p class="d-flex flex-row">
                 <a href="index.html" class="btn"><i class="bi bi-arrow-left"></i></a>
@@ -48,20 +49,18 @@
         </div>
 
         <div class="suggestions">
-            <span>Hi </span>
-            <span>Thanks </span>
-            <span>What is the University Of Zimbabwe </span>
-            <span>Where is the University of Zimbabwe located </span>
+            
         </div>
+
         <div class="footer w-100">
             <input class="form-control bg-dark btn-outline-dark rounded-pill text-white" placeholder="Message" type="text" name="" id="">
             <button onclick="FormbtnClick(event)" class="btn shadow-none audio-send"><i class="bi bi-send"></i></button>
         </div>
-    </div>
-    <!-- Load TensorFlow.js. This is required to use the qna model. -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"> </script>
-    <!-- Load the qna model. -->
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/qna"> </script>
+
+        <div class="loader w-100 h-100 bg-dark opacity-50 position-absolute top-0 d-flex flex-column align-items-center justify-content-center">
+            <div class="spinner-border"></div>
+            <span class="my-3">Chat Bot Loading...</span>
+        </div>
     <script src="assets/vendor/string-similarity.min.js"></script>
     <script src="assets/js/dexie.min.js"></script>
     <script src="assets/js/dataset.js"></script>
@@ -69,5 +68,6 @@
     <script src="assets/js/main.js"></script>
     <script src="assets/js/chat.js"></script>
 </body>
+
 
 </html>

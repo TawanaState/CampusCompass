@@ -1,9 +1,3 @@
-
-const SpeechRecognition = window.SpeechRecognition || webkitSpeechRecognition;
-const SpeechGrammarList = window.SpeechGrammarList || webkitSpeechGrammarList;
-const SpeechRecognitionEvent = window.SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
-const recognition = new SpeechRecognition();
-const speechRecognitionList = new SpeechGrammarList();
 var db = new Dexie('MyChats');
 db.version(1).stores({
     chats : '++id, me, content, data'
@@ -15,11 +9,18 @@ db.chats.each(item => {
 
 user = {displayName : 'State'};
 let model;
-recognition.grammars = speechRecognitionList;
-recognition.continuous = true;
-recognition.lang = 'en-US';
-recognition.interimResults = false;
-recognition.maxAlternatives = 1;
+let suggestions = [
+    'Hi',
+    'Thank you',
+    'Where is the University of Zimbabwe',
+    'When was the University of Zibabwe built?',
+]
+suggestions.forEach((v, k, p) => {
+    let sug = document.createElement('span');
+    sug.innerText = v;
+    select('.suggestions').appendChild(sug);
+})
+
 let QNA = [];
 try {
     QNA = [
@@ -49,41 +50,42 @@ try {
 }
 
 
+const worker = new Worker('assets/js/ww.js');
+// Add listener for when the worker replies
+worker.addEventListener('message', (event) => {
+  console.log('Worker said: ', event.data);
 
-(async ()=>{
-    // Load the model.
-    try {
-        model = await qna.load();
-        setchatState("online");
-    } catch (error) {
-        notify(error, 'text-danger');
-        setchatState("offline");
-    }
-    
-})();
+  if(event.data.start == true){
+    select('body').classList.add('active');
+    select('.loader').remove();
+  }else if(event.data.start == false){
+    setchatState("offline");
+    notify('Qna model could not load.', 'text-danger');
+    select('.loader > span').innerText = 'Failed to load. ';
+    select('.loader > .spinner-border').style.animationIterationCount = 1;
+  }else{
+    addMessage(event.data.text, `Accuracy : ${Math.round(event.data.score * 100)}%`, false);
+    setchatState('online');
+  }
+
+});
+
+
 
 function setchatState(text){
     select('#chat_state').innerText = text;
 }
 
-document.querySelector('input').addEventListener('keydown', (event) => {
-    if (event.target.value !== ""){
-        //select('.footer .audio-send .bi').classList.remove('bi-mic');
-        select('.footer .audio-send .bi').classList.add('bi-send');
-    }else{
-        //select('.footer .audio-send .bi').classList.add('bi-mic');
-        //select('.footer .audio-send .bi').classList.remove('bi-send');
-    }
+document.querySelector('input').addEventListener('keyup', (event) => {
+    select('.suggestions > span', true).forEach((v, k, p) => {
+        if(!v.innerText.toLowerCase().includes(select('input').value.toLowerCase())){
+            v.classList.add('d-none');
+        } else{
+            v.classList.remove('d-none');
+        }
+    })
 });
 
-function startRecog() {
-    recognition.start();
-}
-
-recognition.onresult = function(event) {
-    select('input').value = event.results[0][0].transcript;
-    console.log(`Confidence: ${event.results[0][0].confidence}`);
-}
 
 function addMessage(text, data, me=true) {
     let msg = document.createElement('div');
@@ -110,19 +112,15 @@ async function sendMessage(msg = select('input').value) {
     addMessage(msg, (new Date).toLocaleString());
     try {
         setchatState('typing...');
-        let answers = await model.findAnswers(msg, window.MY_PASSAGES_DATASET);
-        setchatState('');;
-        addMessage(answers[0].text, `Accuracy : ${Math.round(answers[0].score * 100)}%`, false);
+        // Send data to worker
+        worker.postMessage({context : window.MY_PASSAGES_DATASET, question : msg});
     } catch (error) {
         notify(error, 'text-danger');
     }
     
     
 }
-recognition.onspeechend = function() {
-    recognition.stop();
-    document.querySelector('.bi.bi-mic').classList.remove('text-danger');
-}
+
 
 on('click', '.suggestions > span',(event) => {
     select('input').value = event.target.innerText;
@@ -133,7 +131,7 @@ function FormbtnClick(event) {
         //startRecog();
         event.target.querySelector('button i.bi.bi-mic').classList.add('text-danger');
     }else{
-        if(!response(select('input').value.toLowerCase())){
+        if(!response(select('input').value)){
             sendMessage();
             select('input').value = "";
         }
@@ -149,7 +147,7 @@ scrollToBottom();
 function response(qsn){
     let qsns = [];
     QNA.forEach((v, k, p) => {
-        let rating = stringSimilarity.findBestMatch(qsn, v.q);
+        let rating = stringSimilarity.findBestMatch(qsn.toLowerCase(), v.q);
         qsns.push(rating.bestMatch);
     });
     qsns = qsns.sort((a, b) => {

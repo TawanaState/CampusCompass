@@ -1,11 +1,24 @@
 body{
     overflow: none;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    align-items: stretch;
+    height: 100%;
+}
+body div:is(.header, .suggestions, .footer, .chats){
+    filter: blur(10px);
+}
+body.active div:is(.header, .suggestions, .footer, .chats){
+    filter:none;
 }
 .bi{
     color: white;
 }
 .btn{
     color: white!important;
+    box-shadow: none!important;
 }
 .main{
     overflow: none;
@@ -13,6 +26,9 @@ body{
     height: 100vh;
     margin: 0px;
     padding: 0px;
+}
+.header, .footer{
+    flex: 2;
 }
 .header{
     display: flex;
@@ -28,11 +44,12 @@ body{
 }
 .chats{
     padding: 7px;
-    height: calc(100vh - 52px - 52px - 140px) ;
+    height: calc(100vh - 52px - 52px - 80px) ;
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     overflow: hidden auto;
+    flex: 35;
 }
 .chats .msg:first-child{
     margin-top: auto;
@@ -85,17 +102,23 @@ body{
     justify-content: flex-start;
     height: 50px!important;
     margin: 0px;
-    
+    flex: 2;
+}
+@media (min-width : 720px) {
+    .suggestions{
+        flex: 6;
+    }
 }
 .suggestions > span{
     background-color: transparent;
     border: 1px solid gray;
-    padding: 8px 15px;
+    padding: 4px 11px;
     margin: 0px 6px;
     border-radius: 50rem!important;
     white-space: nowrap;
     color: #bdbdbd;
     cursor: hand;
+    font-size: small;
 }
 ::-webkit-scrollbar-thumb{
     opacity: 0.2!important;
@@ -105,7 +128,8 @@ body{
 .footer{
     display:flex;
     flex-direction: row;
-    padding: 5px;
+    padding: 5px 5px 10px 5px;
+
 }
 .footer > input{
     padding: 8px 20px;
@@ -128,7 +152,7 @@ body{
     border-radius: 10px;
     width: fit-content;
     height: fit-content;
-    background-color: #4242422e!important;
+    background-color: #272c30!important;
 }
 .dropdown > span{
     width: 0px;

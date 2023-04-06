@@ -62,7 +62,7 @@
             justify-content: center;
             align-items: center;
             flex-wrap: nowrap;
-            filter: blur(5px);
+            filter: blur(10px);
         }
         .real{
             z-index: 2;
@@ -75,6 +75,7 @@
             flex-direction: column;
             align-items: center;
             flex-wrap: nowrap;
+            height: fit-content;
         }
 
         .features span{
@@ -87,7 +88,7 @@
         body {
             margin: 0px;
             padding: 0px;
-            height: 100vh;
+            overflow-y: auto;
         }
         body > div{
             height: calc(100vh - 4vh);
@@ -103,6 +104,12 @@
             background-image: url(assets/img/campus_compass_bg.png);
             background-position: center;
             background-size: cover;
+        }
+        @media (min-width : 720px) {
+            body > div.real.text-white > p.mx-3{
+                margin-left: 10rem!important;
+                margin-right: 10rem!important;
+            }
         }
     </style>
 </body>

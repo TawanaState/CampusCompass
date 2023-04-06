@@ -20,17 +20,22 @@ var events = [];
 
 
 function refreshUI() {
-
-  try {
-    document.querySelectorAll("datalist#Places > option[type='Friend']").forEach((v, k, p) => {
-      v.remove();
-    });
-    document.querySelectorAll("datalist#Places > option[type='Event']").forEach((v, k, p) => {
-      v.remove();
-    });
-    document.querySelector('ul.list.friends').innerHTML = '';
+    try {
+      document.querySelectorAll("datalist#Places > option[type='Friend']").forEach((v, k, p) => {
+        v.remove();
+      });
+      document.querySelectorAll("datalist#Places > option[type='Event']").forEach((v, k, p) => {
+        v.remove();
+      });  
+    } catch (error) {
+      console.error(error);
+    }
+    
+try {
+    select('ul.list.friends').innerHTML = '';
     select("ul.list.events").innerHTML = '';
     select("ul.list.my-events").innerHTML = '';
+  
   friends.forEach((v, k, p) => {
     let li = document.createElement('li');
     li.innerHTML = `<p>${v.data.username}</p> <span>${new Date(v.data.lastseen).toString()}</span>`;
@@ -39,61 +44,73 @@ function refreshUI() {
     }
     document.querySelector('ul.list.friends').appendChild(li);
 
-
-
-    
-    let op = document.createElement('option');
-    op.value = '@' + v.data.username;
-    op.setAttribute('type', 'Friend');
-    op.innerText = v.data.lastseen;
-    select('datalist#Places').appendChild(op);
-
-
-
-  });
-
-  events.forEach((v, k, p) => {
-    let startTime = new Date(v.data.startTime);
-    let endTime = new Date(v.data.endTime);
-    let now = new Date();
-  
-    if (endTime > now) {
-      let li = document.createElement("li");
-      li.innerHTML = `<p>${v.data.event_name}</p> <span>${new Date(
-        v.data.startTime
-      ).toLocaleTimeString()} - ${new Date(
-        v.data.endTime
-      ).toLocaleTimeString()}</span>`;
-      select("ul.list.events").appendChild(li);
-
-
+    try {
       let op = document.createElement('option');
-      op.value = '~' + v.data.event_name;
-      op.setAttribute('type', 'Event');
-      op.innerText = new Date(v.data.startTime).toLocaleTimeString() + " - " + new Date(v.data.endTime).toLocaleTimeString();
+      op.value = '@' + v.data.username;
+      op.setAttribute('type', 'Friend');
+      op.innerText = v.data.lastseen;
       select('datalist#Places').appendChild(op);
-
+    } catch (error) {
+      console.error(error);
     }
+    
+    
   });
-  
+
   events.forEach((v, k, p) => {
-    let startTime = new Date(v.data.startTime);
-    let endTime = new Date(v.data.endTime);
-  
-    if (v.data.user_uid == user.uid) {
-      let li = document.createElement("li");
-      li.classList.add('edit');
-      li.innerHTML = `<p><span>${v.data.event_name}</span><span>${startTime.toLocaleTimeString()} - ${endTime.toLocaleTimeString()}</span></p>
-      <p style="flex-direction: row;"><i class="bi bi-pencil-fill" onclick="openPrompt('${v.key}')"></i><i onclick="shareEvent('${v.key}')" class="bi bi-share"></i><i class="bi bi-trash" onclick="removeEvent('${v.key}')"></i></p>`;
-      select("ul.list.my-events").appendChild(li);
+    
+    
+    try {
+        let startTime = new Date(v.data.startTime);
+        let endTime = new Date(v.data.endTime);
+        let now = new Date();
+      
+        if (endTime > now) {
+          let li = document.createElement("li");
+          li.innerHTML = `<p>${v.data.event_name}</p> <span>${new Date(
+            v.data.startTime
+          ).toLocaleTimeString()} - ${new Date(
+            v.data.endTime
+          ).toLocaleTimeString()}</span>`;
+          select("ul.list.events").appendChild(li);
+        }
+    }catch (error) {
+      notify(error + ' -- events loop', 'text-danger');
     }
+    
+
+    try {
+        let op = document.createElement('option');
+        op.value = '~' + v.data.event_name;
+        op.setAttribute('type', 'Event');
+        op.innerText = new Date(v.data.startTime).toLocaleTimeString() + " - " + new Date(v.data.endTime).toLocaleTimeString();
+        select('datalist#Places').appendChild(op);
+    } catch (error) {
+      console.error(error);
+    }
+      
+
+  });
+
+  events.forEach((v, k, p) => {
+      let startTime = new Date(v.data.startTime);
+      let endTime = new Date(v.data.endTime);
+    
+      if (v.data.user_uid == user.uid) {
+        let li = document.createElement("li");
+        li.classList.add('edit');
+        li.innerHTML = `<p><span>${v.data.event_name}</span><span>${startTime.toLocaleTimeString()} - ${endTime.toLocaleTimeString()}</span></p>
+        <p style="flex-direction: row;"><i class="bi bi-pencil-fill" onclick="openPrompt('${v.key}')"></i><i onclick="shareEvent('${v.key}')" class="bi bi-share"></i><i class="bi bi-trash" onclick="removeEvent('${v.key}')"></i></p>`;
+        select("ul.list.my-events").appendChild(li);
+      }
   });
 
   } catch (error) {
     console.log(error);
     notify(error + '-- events & friends', 'text-danger');
   }
-  
+
+
 }
 
 refreshUI();
@@ -108,7 +125,7 @@ var friendsListRef = database.ref("friends");
 firebase.auth().onAuthStateChanged((userr) => {
   if (userr) {
     user = userr;
-    var uid = userr.uid;
+    //var uid = userr.uid;
     // ...
   } else {
     if(!window.location.href.includes('signup') && !window.location.href.includes('login')){
@@ -303,5 +320,6 @@ if (navigator.geolocation) {
 
 
 function geolocationFailure() {
+  return 0;
   //notify('Please turn on your location for location tracking.', ['text-danger']);
 }
