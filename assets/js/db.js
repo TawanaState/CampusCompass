@@ -107,7 +107,7 @@ try {
 
   } catch (error) {
     console.log(error);
-    notify(error + '-- events & friends', 'text-danger');
+    //notify(error + '-- events & friends', 'text-danger');
   }
 
 
